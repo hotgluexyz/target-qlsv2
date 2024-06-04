@@ -37,6 +37,7 @@ class Rest:
         """Prepare a request object."""
         url = self.url(endpoint)
         headers = self.http_headers
+        self.logger.info(f"Making {http_method} request to url {url} with params {params} and body {request_data}")
         response = requests.request(
             method=http_method,
             url=url,
@@ -44,6 +45,7 @@ class Rest:
             headers=headers,
             json=request_data,
         )
+        self.logger.info(f"Response from request {response.text}")
         self.validate_response(response)
         return response
 
