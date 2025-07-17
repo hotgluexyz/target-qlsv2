@@ -66,6 +66,9 @@ class QlsV2Sink(RecordSink, Rest):
 
 
     def parse_stringified_object(self, stringified_object):
+        if not isinstance(stringified_object, str):
+            return stringified_object
+        
         try: # Python obj notation
             obj = ast.literal_eval(stringified_object)
             return obj
