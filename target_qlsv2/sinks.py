@@ -1,6 +1,5 @@
 """QlsV2 target sink class, which handles writing streams."""
 
-import ast
 from datetime import datetime, timedelta
 
 from target_qlsv2.client import QlsV2Sink
@@ -23,7 +22,7 @@ class BuyOrdersV2Sink(QlsV2Sink):
         dateformatted = dateoriginal.strftime("%Y-%m-%d")
         deliveries = [{"estimated_arrival": dateformatted}]
         if "line_items" in record:
-            record["line_items"] = ast.literal_eval(record["line_items"])
+            record["line_items"] = self.parse_stringified_object(record["line_items"])
             purchase_order_products = list(
                 map(
                     lambda product: {

@@ -1,5 +1,6 @@
 from singer_sdk.sinks import RecordSink
-
+import json
+import ast
 from target_qlsv2.rest import Rest
 
 
@@ -62,3 +63,15 @@ class QlsV2Sink(RecordSink, Rest):
         if self.name not in self.latest_state["bookmarks"]:
             if not self.latest_state["bookmarks"].get(self.name):
                 self.latest_state["bookmarks"][self.name] = []
+
+
+    def parse_stringified_object(self, stringified_object):
+        if not isinstance(stringified_object, str):
+            return stringified_object
+        
+        try: # Python obj notation
+            obj = ast.literal_eval(stringified_object)
+            return obj
+        except: # JS Objection notation
+            obj = json.loads(stringified_object)
+            return obj
